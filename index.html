@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+</head>
+<body>
+<h2>URL Shortener</h2>
+<form id="shortenForm">
+    <label for="longUrl">Enter Long URL:</label>
+    <input type="text" id="longUrl" name="longUrl" placeholder="https://example.com" required>
+    <button type="button" onclick="shortenUrl()">Shorten URL</button>
+</form>
+
+<div id="shortUrl"></div>
+
+<script>
+    function shortenUrl() {
+        const longUrl = document.getElementById('longUrl').value;
+
+        fetch('http://localhost:3000/shorten', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ longUrl }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('shortUrl').innerHTML = `Shortened URL: <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while shortening the URL. Please try again.');
+            });
+    }
+</script>
+</body>
+</html>
+
